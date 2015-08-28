@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+{% set page_header='Ввод операций' %}
+
+{%  block content %}
+
+
+            <div class="row">
+                <div class="col-lg-8">
+
+                    {% include 'WebBundle:Default:blocks/index/operation.html.twig' %}
+                    {% include 'WebBundle:Default:blocks/index/journal.html.twig' %}
+
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4">
+
+                    {% include 'WebBundle:Default:blocks/index/bill.html.twig' %}
+                    {% include 'WebBundle:Default:blocks/index/control.html.twig' %}
+
+
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('assets/js/index.js')}}"></script>
+    <script src="{{  asset('assets/bower_components/jquery-ui/ui/minified/datepicker.min.js')}}"></script>
+    <script src="{{  asset('assets/bower_components/moment/min/moment.min.js')}}"></script>
+{% endblock %}

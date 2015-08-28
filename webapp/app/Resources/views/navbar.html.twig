@@ -1,0 +1,70 @@
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+
+        <a class="navbar-brand" href="#">Finansez - учет финансов</a>
+    </div>
+    <!-- /.navbar-header -->
+
+    {% if app.user %}
+        {# block only for auth users #}
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-user">
+
+                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Настройки</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="{{ path('logout') }}"><i class="fa fa-sign-out fa-fw"></i><span id="logout-button">Выйти({{ app.user.username }})</span></a>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+    {% endif %}
+    <!-- /.navbar-top-links -->
+
+
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                {% if app.user %}
+                    {# block only for auth users #}
+                    <li >
+                        <a href="{{ path('index') }}"><i class="active fa fa-dashboard fa-fw"></i>Главная</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('stats') }}"><i class="fa fa-bar-chart-o fa-fw"></i>Отчеты и графики</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-wrench fa-fw"></i>Настройки<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+
+                            <li>
+                                <a href="{{ path('bills') }}">Счета</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('categories') }}">Категории</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path("login") }}"><i class="active glyphicon glyphicon-user"></i> Вход</a>
+                        <a href="{{ path("signup") }}"><i class="glyphicon glyphicon-list-alt"></i> Регистрация</a>
+                        <a href="{{ path("help") }}"><i class="glyphicon glyphicon-question-sign"></i> Помощь</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+
+    <!-- /.navbar-static-side -->
+</nav>

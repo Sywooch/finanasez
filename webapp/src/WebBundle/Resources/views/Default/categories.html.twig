@@ -1,0 +1,73 @@
+{% extends '::base.html.twig' %}
+{% set page_header='Категории' %}
+
+{%  block content %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bell fa-fw"></i>Управление категориями
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="25%">Название</th>
+                                <th width="50%">Комментарий</th>
+                                <th width="15%">Тип</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <!-- /.panel-body -->
+            </div> <!-- panel -->
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bell fa-fw"></i>Добавить категорию
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <form role="form" data-apiurl="{{ apiurl }}">
+                        <div class="form-group">
+                            <label for="newname">Название категории</label>
+                            <input type="text" class="form-control"  id="newname"  placeholder="Название категории">
+                        </div>
+                        <div class="form-group">
+                            <label for="newcomment">Комментарий</label>
+                            <input type="text" class="form-control"  id="newcomment"  placeholder="Комментарий для категории">
+                        </div>
+                        <div class="form-group">
+                            <label for="newtype">Тип</label>
+                            <select id="newtype" size="1" class="form-control">
+                                <option value="out">Расход</option>
+                                <option value="in">Доход</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button id="newCategoryButton" class="btn btn-primary btn-block">Добавить категорию</button>
+                        </div>
+                    </form>
+
+                </div>
+                <!-- /.panel-body -->
+            </div> <!-- panel -->
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/js/categories.js') }}"></script>
+{% endblock %}
+

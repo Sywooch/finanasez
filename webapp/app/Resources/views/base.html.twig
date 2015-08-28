@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Finansez - {{ page_header }}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link href="{{  asset('assets/bower_components/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{  asset('assets/bower_components/metisMenu/dist/metisMenu.min.css')}}" rel="stylesheet">
+    <link href="{{  asset('assets/dist/css/sb-admin-2.css')}}" rel="stylesheet">
+    <link href="{{  asset('assets/bower_components/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{  asset('assets/bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{  asset('assets/css/main.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+{% block body %}
+    {% include 'navbar.html.twig' %}
+    <div id="wrapper">
+
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">{{ page_header }}</h1>
+                    {% if app.user and app.security.token.roles[0].role == "ROLE_DEMO" %}
+                        <div class="alert alert-danger">
+                            Вы авторизованы в демо-режиме.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% block content %}
+                {# непосредственно контент здесь. \
+                 не забудь передать page_header #}
+            {% endblock %}
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{  asset('assets/bower_components/jquery/dist/jquery.min.js')}}"></script>
+    <script src="{{  asset('assets/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script src="{{  asset('assets/bower_components/metisMenu/dist/metisMenu.min.js')}}"></script>
+    <script src="{{  asset('assets/dist/js/sb-admin-2.js')}}"></script>
+    <script src="{{  asset('assets/js/helpers.js') }}"></script>
+{% endblock %}
+</body>
+</html>
+
+

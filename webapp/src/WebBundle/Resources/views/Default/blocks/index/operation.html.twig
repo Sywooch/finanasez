@@ -1,0 +1,107 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="fa fa-bar-chart-o fa-fw"></i>Операции
+
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#operation-menu1">Расход</a></li>
+            <li><a data-toggle="tab" href="#operation-menu2">Доход</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="operation-menu1" class="tab-pane fade in active">
+                <h3>Внести трату</h3>
+
+                <form autocomplete="off" id="form-spending" class="form-horizontal" data-apiurl="{{ apiurl }}">
+                    <div class="form-group">
+                        <label for="amount" class="col-sm-2 control-label">Сумма</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="amount" autofocus placeholder="Введите сумму">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment" class="col-sm-2 control-label">Комментарий</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="comment" placeholder="Комментарий к операции(не обязательно)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-sm-2 control-label">Категория</label>
+                        <div class="col-sm-10">
+                            <select id="category" size="1" class="form-control">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bill" class="col-sm-2 control-label">Счет</label>
+                        <div class="col-sm-10">
+                            <select id="bill" size="1" class="form-control">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="datepicker" class="col-sm-2 control-label">Дата</label>
+                        <div class="col-sm-10">
+                            <input class="datepicker form-control" type="text" id="datepicker">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="submit" class="btn btn-primary btn-block">Внести расход</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="operation-menu2" class="tab-pane fade">
+                <h3>Внести доход</h3>
+                <form autocomplete="off" id="form-earning" class="form-horizontal" data-apiurl="{{ apiurl }}">
+                    <div class="form-group">
+                        <label for="amount" class="col-sm-2 control-label">Сумма</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="amount" autofocus placeholder="Введите сумму">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment" class="col-sm-2 control-label">Комментарий</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="comment" placeholder="Комментарий к операции(не обязательно)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-sm-2 control-label">Источник дохода</label>
+                        <div class="col-sm-10">
+                            <select id="category" size="1" class="form-control">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bill" class="col-sm-2 control-label">Счет</label>
+                        <div class="col-sm-10">
+                            <select id="bill" size="1" class="form-control">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="datepicker" class="col-sm-2 control-label">Дата</label>
+                        <div class="col-sm-10">
+                            <input  class="datepicker form-control" type="text" id="datepicker">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="submit" class="btn btn-primary btn-block">Зафиксировать доход</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!-- /.panel-body -->
+</div>
