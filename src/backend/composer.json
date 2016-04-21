@@ -1,0 +1,28 @@
+{
+    "name": "finansez/finansez",
+    "description": "finansez",
+    "type": "project",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": ">=2.0.6",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-swiftmailer": "*",
+        "yiisoft/yii2-codeception": "*",
+        "php-amqplib/php-amqplib": "2.5.*"
+    },
+    "require-dev": {
+        "codeception/codeception": "*",
+        "yiisoft/yii2-faker": "*",
+        "flow/jsonpath": "*"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}

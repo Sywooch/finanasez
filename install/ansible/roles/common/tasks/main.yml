@@ -1,0 +1,22 @@
+---
+
+- name: Common packages
+  apt: pkg={{item}} force=yes
+  with_items:
+    - mc
+    - nano
+    - telnet
+    - wget
+    - curl
+    - git
+    - python-pycurl
+    - nodejs
+    - npm
+
+- user: name={{user}}
+
+- template: src=hostname dest=/etc/hostname
+
+- template: src=hosts dest=/etc/hosts
+
+- template: src=locale dest=/etc/default/locale

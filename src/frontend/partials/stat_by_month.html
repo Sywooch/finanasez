@@ -1,0 +1,66 @@
+<div class="row">
+
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Статистика по месяцам
+            </header>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form class="form" role="form">
+                            <div class="form-group">
+                                <label for="filter-by-bill">Фильтр по счетам</label>
+                                <am-multiselect id="filter-by-bill" class="input-lg"
+                                                multiple="true"
+                                                ms-selected ="Выбрано {{billFilterSelected.length}} счетов"
+                                                ng-model="billFilterSelected"
+                                                ms-header="Выберите счета"
+                                                options="bill for bill in billList"
+                                                template-url="partials/elements/multiselect.html"
+                                                change=""></am-multiselect>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div ng-show="!statListLoaded" class="bill-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <table ng-show="statListLoaded" class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th width="33%">Месяц</th>
+                        <th width="33%">Расход</th>
+                        <th width="33%">Доход</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in statList">
+                            <td>{{item.month | prettyDateFilter : 'MM.YYYY'}}</td>
+                            <td>{{item.spend_sum}}</td>
+                            <td>{{item.income_sum}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </section>
+
+        <section class="panel">
+            <header class="panel-heading">
+                Графическое представление
+            </header>
+            <div class="panel-body">
+
+                <canvas id="bar" class="chart chart-bar"
+                        chart-data="graph.data" chart-labels="graph.labels" chart-series="graph.series">
+                </canvas>
+
+            </div>
+        </section>
+    </div>
+</div>
+

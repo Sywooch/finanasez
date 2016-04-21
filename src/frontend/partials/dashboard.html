@@ -1,0 +1,429 @@
+<div class="row" style="margin-bottom:5px;">
+
+
+    <div class="col-md-3">
+        <div class="sm-st clearfix">
+            <span class="sm-st-icon st-red"><i class="fa fa-check-square-o"></i></span>
+
+            <div class="sm-st-info">
+                <div ng-show="!monthlyTransactionListLoaded" class="short-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <div ng-show="monthlyTransactionListLoaded">
+                    <span>{{monthlyTransactionList | hashSize}}</span>
+                    Транзакций за этот месяц
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="sm-st clearfix">
+            <span class="sm-st-icon st-blue"><i class="fa fa-dollar"></i></span>
+
+            <div class="sm-st-info">
+                <div ng-show="!billHashLoaded" class="short-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <div ng-show="billHashLoaded">
+                    <span>{{billHash | billBalanceSum}}</span>
+                    Руб. всего на счетах
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="sm-st clearfix">
+            <span class="sm-st-icon st-violet"><i class="fa fa-plus"></i></span>
+
+            <div class="sm-st-info">
+                <div ng-show="!monthlyTransactionListLoaded" class="short-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <div ng-show="monthlyTransactionListLoaded">
+                    <span>{{monthlyTransactionList | transactionIncomeSum}}</span>
+                    Руб. доход за месяц
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="sm-st clearfix">
+            <span class="sm-st-icon st-green"><i class="fa fa-minus"></i></span>
+
+            <div class="sm-st-info">
+                <div ng-show="!monthlyTransactionListLoaded" class="short-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <div ng-show="monthlyTransactionListLoaded">
+                    <span>{{monthlyTransactionList | transactionSpendSum}}</span>
+                    Руб. расход за месяц
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-lg-8">
+        <section class="panel">
+            <header class="panel-heading">
+                Операции
+            </header>
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" data-target="#spend" ng-click="clearOperationModel()">
+                            <i class="fa fa-minus"></i>
+                            Расход
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" data-target="#income" ng-click="clearOperationModel()">
+                            <i class="fa fa-plus"></i>
+                            Доход
+                        </a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" data-target="#transfer" ng-click="clearOperationModel()">
+                            <i class="fa fa-exchange"></i>
+                            Перевод
+                        </a>
+                    </li>
+                </ul>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div id="spend" class="tab-pane active">
+                            <form class="form-horizontal" role="form" ng-submit="createSpend()">
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['amount'],
+                            'has-error': operationSubmitted && error['amount'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Сумма</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.amount" ng-disabled="operationButtonBlocked"
+                                               type="text" class="form-control" placeholder="Сумма" autofocus>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['amount'] }}</div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['comment'],
+                            'has-error': operationSubmitted && error['comment'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Комментарий</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.comment" ng-disabled="operationButtonBlocked"
+                                               type="text" class="form-control" placeholder="Комментарий к операции">
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['comment'] }}
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['category_id'],
+                            'has-error': operationSubmitted && error['category_id'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Категория</label>
+
+                                    <div class="col-lg-10">
+                                        <select ng-model="operationModel.category_id"
+                                                ng-disabled="operationButtonBlocked" class="form-control">
+                                            <option ng-repeat="category in categoryList | categoryFilter:'spend'"
+                                                    value="{{category.id}}">{{category.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['category_id']
+                                        }}
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-disabled="operationButtonBlocked" ng-class="{ 'has-success': operationSubmitted && !error['bill_id'],
+                            'has-error': operationSubmitted && error['bill_id'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Счет</label>
+
+                                    <div class="col-lg-10">
+                                        <select ng-model="operationModel.bill_id" ng-disabled="operationButtonBlocked"
+                                                class="form-control">
+                                            <option ng-repeat="bill in billHash" value="{{bill.id}}">{{bill.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['bill_id'] }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-sm-2 control-label">Дата</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.date" ng-disabled="operationButtonBlocked" type="text"
+                                               class="form-control" placeholder="Дата"
+                                               input-mask="99.99.9999">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button type="submit" class="btn btn-danger"
+                                                ng-disabled="operationButtonBlocked">Внести расход
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="income" class="tab-pane">
+                            <form class="form-horizontal" role="form" ng-submit="createIncome()">
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['amount'],
+                        'has-error': operationSubmitted && error['amount'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Сумма</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.amount" ng-disabled="operationButtonBlocked"
+                                               type="text" class="form-control" placeholder="Сумма" autofocus>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['amount'] }}</div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['comment'],
+                        'has-error': operationSubmitted && error['comment'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Комментарий</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.comment" ng-disabled="operationButtonBlocked"
+                                               type="text" class="form-control" placeholder="Комментарий к операции">
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['comment'] }}
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['category_id'],
+                        'has-error': operationSubmitted && error['category_id'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Категория</label>
+
+                                    <div class="col-lg-10">
+                                        <select ng-model="operationModel.category_id"
+                                                ng-disabled="operationButtonBlocked" class="form-control">
+                                            <option ng-repeat="category in categoryList | categoryFilter:'income'"
+                                                    value="{{category.id}}">{{category.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['category_id']
+                                        }}
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['bill_id'],
+                        'has-error': operationSubmitted && error['bill_id'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Счет</label>
+
+                                    <div class="col-lg-10">
+                                        <select ng-model="operationModel.bill_id" ng-disabled="operationButtonBlocked"
+                                                class="form-control">
+                                            <option ng-repeat="bill in billHash" value="{{bill.id}}">{{bill.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['bill_id'] }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-sm-2 control-label">Дата</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.date" ng-disabled="operationButtonBlocked" type="text"
+                                               class="form-control" placeholder="Дата"
+                                               input-mask="99.99.9999">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button type="submit" class="btn btn-danger"
+                                                ng-disabled="operationButtonBlocked">Внести доход
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="transfer" class="tab-pane ">
+                            <form class="form-horizontal" role="form" ng-submit="createTransfer()">
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['amount'],
+                        'has-error': operationSubmitted && error['amount'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Сумма</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.amount" ng-disabled="operationButtonBlocked"
+                                               type="text" class="form-control" placeholder="Сумма" autofocus>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['amount'] }}</div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['comment'],
+                        'has-error': operationSubmitted && error['comment'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Комментарий</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.comment" ng-disabled="operationButtonBlocked"
+                                               type="text" class="form-control" placeholder="Комментарий к операции">
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['comment'] }}
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['source_bill_id'],
+                        'has-error': operationSubmitted && error['source_bill_id'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Источник</label>
+
+                                    <div class="col-lg-10">
+                                        <select ng-model="operationModel.source_bill_id"
+                                                ng-disabled="operationButtonBlocked" class="form-control">
+                                            <option ng-repeat="bill in billHash" value="{{bill.id}}">{{bill.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['source_bill_id']
+                                        }}
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-success': operationSubmitted && !error['bill_id'],
+                        'has-error': operationSubmitted && error['bill_id'] }">
+                                    <label class="col-lg-2 col-sm-2 control-label">Приемник</label>
+
+                                    <div class="col-lg-10">
+                                        <select ng-model="operationModel.bill_id"
+                                                ng-disabled="operationButtonBlocked" class="form-control">
+                                            <option ng-repeat="bill in billHash" value="{{bill.id}}">{{bill.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block help-block-error col-lg-offset-2">{{ error['category_id']
+                                        }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-sm-2 control-label">Дата</label>
+
+                                    <div class="col-lg-10">
+                                        <input ng-model="operationModel.date" ng-disabled="operationButtonBlocked" disabled type="text"
+                                               class="form-control" placeholder="Дата"
+                                               input-mask="99.99.9999">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button type="submit" class="btn btn-danger"
+                                                ng-disabled="operationButtonBlocked">Осуществить перевод
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-4">
+        <!--chat start-->
+        <section class="panel">
+            <header class="panel-heading">
+                Состояние счетов
+            </header>
+            <div class="panel-body">
+                <div ng-show="!billHashLoaded" class="bill-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <table ng-show="billHashLoaded" class="table table-bordered">
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Название</th>
+                        <th>Баланс</th>
+                    </tr>
+                    <tr ng-repeat="bill in billHash | billWithBalanceFilter">
+                        <td>{{$index+1}}</td>
+                        <td>{{bill.name}}</td>
+                        <td>{{bill.balance}}</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </div>
+
+
+</div>
+
+<div class="row">
+
+    <div class="col-lg-8">
+        <section class="panel">
+            <header class="panel-heading">
+                Журнал операций за месяц
+            </header>
+            <div class="panel-body">
+                <div ng-show="!monthlyTransactionListLoaded" class="bill-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <table ng-show="monthlyTransactionListLoaded" class="table table-bordered">
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Тип</th>
+                        <th>Сумма</th>
+                        <th>Счет</th>
+                        <th>Категория</th>
+                    </tr>
+                    <tr ng-repeat="transaction in (filteredTransactionList = (monthlyTransactionList | transactionOrderFilter)) | limitTo: monthlyTransactionCountToDisplayInJournal">
+                        <td>{{$index+1}}</td>
+                        <td ng-bind-html="transaction.type | humanReadableTransactionType"></td>
+                        <td>{{transaction.amount}}</td>
+                        <td ng-if="!transaction.sourceBill">
+                            {{transaction.bill.name}}
+                        </td>
+                        <td ng-if="transaction.sourceBill">
+                            {{transaction.sourceBill.name}} <i class="glyphicon glyphicon-arrow-right"></i> {{transaction.bill.name}}
+                        </td>
+                        <td>{{transaction.category.name}}</td>
+                    </tr>
+                </table>
+                <div ng-if="filteredTransactionList.length > monthlyTransactionCountToDisplayInJournal"
+                     class="form-group">
+                    <div class="col-lg-offset-4 col-lg-4">
+                        <button ng-click="transactionJournalLoadMore()" type="button"
+                                class="btn btn-success btn-xs btn-block">Загрузить еще
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-4">
+        <!--chat start-->
+        <section class="panel">
+            <header class="panel-heading">
+                Контроль расходов
+            </header>
+            <div class="panel-body">
+                <div ng-show="!statHashLoaded" class="bill-info-loading">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <table ng-show="statHashLoaded" class="table table-bordered">
+                    <tr>
+                        <td>Сегодня</td>
+                        <td>{{statHash.today_spend}}</td>
+                    </tr>
+                    <tr>
+                        <td>Вчера</td>
+                        <td>{{statHash.yesterday_spend}}</td>
+                    </tr>
+                    <tr>
+                        <td>Текущая неделя</td>
+                        <td>{{statHash.current_week_spend}}</td>
+                    </tr>
+                    <tr>
+                        <td>Прошлая неделя</td>
+                        <td>{{statHash.previous_week_spend}}</td>
+                    </tr>
+                    <tr>
+                        <td>Текущий месяц</td>
+                        <td>{{statHash.current_month_spend}}</td>
+                    </tr>
+                    <tr>
+                        <td>Прошлый месяц</td>
+                        <td>{{statHash.previous_month_spend}}</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </div>
+
+
+</div>

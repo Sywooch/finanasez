@@ -1,0 +1,42 @@
+<section class="panel">
+    <header class="panel-heading">
+        Вход на сайт
+    </header>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <form ng-submit="login()" name="loginForm" id="login-form" method="post" role="form">
+
+                    <div ng-class="{ 'has-success': !error['username'] && loginSubmitted,
+                                        'has-error': error['username'] && loginSubmitted }"
+                         class="form-group required">
+                        <label class="control-label" for="loginform-username">Имя пользователя</label>
+                        <input ng-model="userModel.username" type="text" id="loginform-username" class="form-control"
+                               placeholder="Имя пользователя" autofocus>
+
+                        <p class="help-block help-block-error">{{ error['username'] }}</p>
+                    </div>
+
+                    <div ng-class="{ 'has-success': !error['password'] && loginSubmitted,
+                                            'has-error': error['password'] && loginSubmitted }"
+                         class="form-group required">
+                        <label class="control-label" for="loginform-password">Пароль</label>
+                        <input ng-model="userModel.password" type="password" id="loginform-password" class="form-control"
+                               placeholder="Пароль">
+
+                        <p class="help-block help-block-error">{{ error['password'] }}</p>
+                    </div>
+
+                    <div ng-show="loginButtonPressed" class="text-center">
+                        <img src="/img/ajax-loader.gif">
+                    </div>
+                    <div ng-show="!loginButtonPressed" class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block" name="login-button">Войти</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+

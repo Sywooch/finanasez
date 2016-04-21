@@ -1,0 +1,36 @@
+{
+  "name": "finansez-frontend",
+  "description": "angular frontend 4 finansez.com",
+  "main": "",
+  "moduleType": [],
+  "authors": [
+    "Ugolnikov Victor http://github.com/uglovvic/"
+  ],
+  "analytics": false,
+  "timeout": 120000,
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "angular-bootstrap": "~0.14.3",
+    "angular": "~1.4.8",
+    "angular-route": "~1.4.8",
+    "bootstrap": "~3.3.6",
+    "font-awesome": "~4.5.0",
+    "moment": "~2.10.6",
+    "angular-strap": "~2.3.6",
+    "angular-ui-router": "~0.2.17",
+    "jquery-mask-plugin": "~1.13.4",
+    "amitava82-angular-multiselect": "~1.1.0",
+    "angular-chart.js": "~0.8.8",
+    "Chart.js": "~1.0.2"
+  }
+}

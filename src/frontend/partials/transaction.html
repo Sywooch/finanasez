@@ -1,0 +1,167 @@
+<div class="row">
+
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="glyphicon glyphicon-list"></i>&nbsp;Операции
+            </header>
+            <div class="panel-body">
+                <div class="panel-body table-responsive">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <form class="form" role="form">
+                                <div>Дата транзакции:</div>
+                                <div class="form-group">
+                                    <label class="sr-only">Дата</label>
+                                    <input ng-model="filterAttributes.date_interval_from"
+                                           ng-model-options="{debounce: 500}" input-mask="99.99.9999" type="text"
+                                           class="form-control sm-input" placeholder="Дата от">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only">Дата</label>
+                                    <input ng-model="filterAttributes.date_interval_till"
+                                           ng-model-options="{debounce: 500}" input-mask="99.99.9999" type="text"
+                                           class="form-control sm-input" placeholder="Дата до">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form class="form" role="form">
+                                <div>Сумма транзакции:</div>
+                                <div class="form-group">
+                                    <label class="sr-only">Дата</label>
+                                    <input ng-model="filterAttributes.amount_from" ng-model-options="{debounce: 500}"
+                                           type="text" class="form-control sm-input" placeholder="Сумма от">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only">Дата</label>
+                                    <input ng-model="filterAttributes.amount_till" ng-model-options="{debounce: 500}"
+                                           type="text" class="form-control sm-input" placeholder="Сумма до">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-sm-6">
+                            <form class="form-inline" role="form">
+                                <div>тип транзакции:</div>
+                                <div class="form-group" style="width: 100%">
+                                    <select ng-model="filterAttributes.type" ng-model-options="{debounce: 500}" size="1"
+                                            class="form-control" style="width: 100%;">
+                                        <option value="">-- Не выбрано --</option>
+                                        <option value="spend">Расход</option>
+                                        <option value="income">Доход</option>
+                                        <option value="transfer">Перевод</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form class="form-inline" role="form">
+                                <div>Комментарий</div>
+                                <div class="form-group" style="width: 100%;">
+                                    <input ng-model="filterAttributes.comment" ng-model-options="{debounce: 500}"
+                                           type="text" class="form-control" placeholder="Комментарий"
+                                           style="width: 100%;">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div ng-show="!transactionHashLoaded && limitAttributes.offset === 0" class="bill-info-loading">
+                        <img src="/img/ajax-loader.gif">
+                    </div>
+
+                    <table ng-hide="!transactionHashLoaded && limitAttributes.offset === 0" class="table table-bordered"
+                           style="margin-top: 20px">
+                        <thead>
+                        <tr>
+                            <th>Тип</th>
+                            <th>Сумма</th>
+                            <th>Счет</th>
+                            <th>Категория</th>
+                            <th>Дата</th>
+                            <th>Комментарий</th>
+                            <th>Действия</th>
+                        </tr>
+                        <tr ng-repeat="transaction in transactionHash">
+                            <td>
+                                <span ng-if="!updateFormHash[transaction.id]" ng-bind-html="transaction.type | humanReadableTransactionType"></span>
+                                <select ng-if="updateFormHash[transaction.id] && !transaction.sourceBill" ng-disabled="updateSubmitted" ng-model="updateModel.type" size="1"
+                                        class="form-control">
+                                    <option ng-selected="transaction.type == 1" value="spend">Расход</option>
+                                    <option ng-selected="transaction.type == 2" value="income">Доход</option>
+                                </select>
+                                <div class="has-error">
+                                    <p ng-if="updateFormHash[transaction.id] && error['type']" class="help-block help-block-error">{{ error['type'] }}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <span ng-if="!updateFormHash[transaction.id]">{{transaction.amount}}</span>
+                                <input type="text" ng-if="updateFormHash[transaction.id]" ng-disabled="updateSubmitted" ng-model="updateModel.amount" ng-value="{{transaction.amount}}" class="form-control">
+                                <div class="has-error">
+                                    <p ng-if="updateFormHash[transaction.id] && error['amount']" class="help-block help-block-error">{{ error['amount'] }}</p>
+                                </div>
+                            </td>
+                            <td ng-if="!transaction.sourceBill">
+                                {{transaction.bill.name}}
+                            </td>
+                            <td ng-if="transaction.sourceBill">
+                                {{transaction.sourceBill.name}} <i class="glyphicon glyphicon-arrow-right"></i>
+                                {{transaction.bill.name}}
+                            </td>
+                            <td>
+                                <span ng-if="!updateFormHash[transaction.id]">{{transaction.category.name}}</span>
+                                <select ng-if="updateFormHash[transaction.id] && !transaction.sourceBill" ng-disabled="updateSubmitted" ng-model="updateModel.category_id" size="1"
+                                        class="form-control">
+                                    <option ng-if="updateModel.type == 'spend' || (!updateModel.type && transaction.type == 1)" ng-repeat="category in categoryList | categoryFilter:'spend'" ng-selected="transaction.category_id == category.id" ng-value="category.id">{{category.name}}</option>
+                                    <option ng-if="updateModel.type == 'income' || (!updateModel.type && transaction.type == 2)" ng-repeat="category in categoryList | categoryFilter:'income'" ng-selected="transaction.category_id == category.id" ng-value="category.id">{{category.name}}</option>
+                                </select>
+                                <div class="has-error">
+                                    <p ng-if="updateFormHash[transaction.id] && error['category_id']" class="help-block help-block-error">{{ error['category_id'] }}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <span ng-if="!updateFormHash[transaction.id]">
+                                    {{transaction.date | prettyDateFilter}}
+                                </span>
+                                <input type="text" ng-if="updateFormHash[transaction.id]"
+                                        ng-value="transaction.date | prettyDateFilter" ng-model="updateModel.date" class="form-control" input-mask="99.99.9999">
+                            </td>
+                            <td>
+                                <span ng-if="!updateFormHash[transaction.id]">
+                                    {{transaction.comment}}
+                                </span>
+                                <input type="text" ng-if="updateFormHash[transaction.id]"
+                                       ng-model="updateModel.comment" class="form-control">
+                            </td>
+                            <td>
+                                <a ng-if="!updateFormHash[transaction.id]" ng-click="showUpdateForm(transaction.id)" href="#"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a ng-if="!updateFormHash[transaction.id]" ng-click="removeTransaction(transaction.id)" href="#"><i class="glyphicon glyphicon-trash"></i></a>
+                                <button ng-if="updateFormHash[transaction.id]"
+                                        ng-click="updateTransaction(transaction.id)" ng-disabled="updateSubmitted"
+                                        class="btn btn-primary">Сохранить
+                                </button>
+                            </td>
+                        </tr>
+
+                        </thead>
+                    </table>
+
+                    <div ng-if="limitAttributes.canLoadMore && transactionHashLoaded" class="col-lg-offset-4 col-lg-4">
+                        <button ng-click="loadMore()" type="button"
+                                class="btn btn-success btn-xs btn-block">Загрузить еще
+                        </button>
+                    </div>
+
+                    <div ng-if="!transactionHashLoaded && limitAttributes.offset > 0" class="bill-info-loading">
+                        <img src="/img/ajax-loader.gif">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</div>

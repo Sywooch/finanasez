@@ -1,5 +1,0 @@
-web:
-    resource: "@WebBundle/Controller/"
-    type:     annotation
-    prefix:   /
-

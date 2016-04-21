@@ -1,0 +1,26 @@
+---
+nginx_user: "vagrant"
+user: "vagrant"
+hostname: "finansez"
+app_path: "/vagrant"
+
+db_host: "127.0.0.1"
+db_name: "finansez"
+db_user: "vagrant"
+db_pass: "vagrant"
+
+amqp_host: "localhost"
+amqp_port: 5672
+amqp_user: "guest"
+amqp_pass: "guest"
+
+postgres_synchronous_commit: "off"
+
+hosts:
+  - ip: 127.0.0.1
+    host: finansez.loc v1.api.finansez.loc
+
+yii_debug: "true"
+yii_env: "dev"
+
+cache_static_value: "off"

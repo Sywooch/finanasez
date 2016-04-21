@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Выполняется вход в демо-режим
+            </header>
+            <div class="panel-body">
+                <div ng-show="showLoading" class="text-center">
+                    <img src="/img/ajax-loader.gif">
+                </div>
+                <div ng-show="error['message']" class="alert alert-danger">
+                    {{error['message']}}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+

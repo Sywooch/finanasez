@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h3 class="modal-title">Операции по категории: {{categoryName}}</h3>
+</div>
+<div class="modal-body">
+
+    <div ng-show="!transactionHashLoaded" class="bill-info-loading">
+        <img src="/img/ajax-loader.gif">
+    </div>
+
+    <table ng-show="transactionHashLoaded" class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Сумма</th>
+            <th>Счет</th>
+            <th>Дата</th>
+            <th>Комментарий</th>
+        </tr>
+        <tr ng-repeat="transaction in transactionHash">
+            <td>
+                {{transaction.amount}}
+            </td>
+            <td>
+                {{transaction.bill.name}}
+            </td>
+            <td>{{transaction.datetime_local | prettyDateFilter}}</td>
+            <td>{{transaction.comment}}</td>
+        </tr>
+
+        </thead>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="close()">Закрыть</button>
+</div>

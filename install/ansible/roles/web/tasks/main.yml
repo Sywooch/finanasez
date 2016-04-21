@@ -1,0 +1,95 @@
+---
+
+- user: name={{user}}
+
+- name: Nginx Repo
+  apt_repository: repo='deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx'
+
+- name: Nginx Repo Key
+  apt_key: url=http://nginx.org/keys/nginx_signing.key
+
+- name: Nginx
+  apt: pkg=nginx force=yes
+
+- name: Nginx cleanup
+  file: path={{item}} state=absent
+  with_items:
+    - /etc/nginx/conf.d/default.conf
+    - /etc/nginx/conf.d/example_ssl.conf
+
+- template: src=nginx/nginx.conf dest=/etc/nginx/nginx.conf
+  notify: Reload Nginx
+
+- template: src=nginx/conf.d/web.conf dest=/etc/nginx/conf.d/web.conf
+  notify: Reload Nginx
+
+- name: Rabbitmq
+  apt: pkg=rabbitmq-server force=yes
+
+- name: PHP 5.6 Repo
+  apt_repository: repo='ppa:ondrej/php5-5.6'
+- name: PHP 5.6
+  apt: pkg={{item}} force=yes
+  with_items:
+    - php5-cli
+    - php5-fpm
+    - php5-json
+    - php5-mcrypt
+    - php5-curl
+    - php5-pgsql
+
+- template: src=fpm/init/php5-fpm.conf dest=/etc/init/php5-fpm.conf
+
+- template: src=cli/php.ini dest=/etc/php5/cli/php.ini
+
+- template: src=fpm/php.ini dest=/etc/php5/fpm/php.ini
+  notify: Reload php-fpm
+
+- template: src=fpm/php-fpm.conf dest=/etc/php5/fpm/php-fpm.conf
+  notify: Reload php-fpm
+
+- template: src=fpm/pool.d/www.conf dest=/etc/php5/fpm/pool.d/www.conf
+  notify: Reload php-fpm
+
+- file: path={{app_path}}/src/backend/v1/web/assets state=directory   mode=0777
+- file: path={{app_path}}/src/backend/v1/runtime state=directory   mode=0777
+
+- template: src=backend/config/backend/common/config/main-local.php    dest={{app_path}}/src/backend/common/config/main-local.php        mode=0644
+- template: src=backend/config/backend/common/config/params-local.php    dest={{app_path}}/src/backend/common/config/params-local.php        mode=0644
+- template: src=backend/config/backend/v1/config/main-local.php    dest={{app_path}}/src/backend/v1/config/main-local.php        mode=0644
+- template: src=backend/config/backend/v1/config/params-local.php    dest={{app_path}}/src/backend/v1/config/params-local.php        mode=0644
+- template: src=backend/config/backend/console/config/main-local.php    dest={{app_path}}/src/backend/console/config/main-local.php        mode=0644
+- template: src=backend/config/backend/console/config/params-local.php    dest={{app_path}}/src/backend/console/config/params-local.php        mode=0644
+- template: src=backend/web/v1/index.php.tpl    dest={{app_path}}/src/backend/v1/web/index.php        mode=0644
+- template: src=backend/yii.tpl    dest={{app_path}}/src/backend/yii        mode=0755
+
+# composer
+- shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+- shell: composer self-update
+- shell: composer global require "fxp/composer-asset-plugin:~1.0.0"
+  ignore_errors: yes
+- shell: export PATH="$HOME/.composer/vendor/bin:$PATH"
+- shell: cd {{app_path}}/src/backend && sudo -u {{user}} composer install
+
+# codeception
+- shell: composer global require "codeception/codeception=2.0.*" "codeception/specify=*" "codeception/verify=*"
+  when: yii_env != "prod"
+
+
+# frontend install & build
+- shell: npm install -g bower gulp-cli
+- shell: npm install -g npm@next
+- shell: cd {{app_path}}/src/frontend && npm install --no-bin-links
+- shell: cd {{app_path}}/src/frontend && npm install source-map
+- shell: cd {{app_path}}/src/frontend && sudo -u {{user}} bower install
+- shell: cd {{app_path}}/src/frontend && sudo -u {{user}} gulp default --production # build with production flag on yii_env = prod
+  when: yii_env == "prod"
+  ignore_errors: yes
+- shell: cd {{app_path}}/src/frontend && sudo -u {{user}} gulp default # build without production flag on yii_env != prod
+  when: yii_env != "prod"
+  ignore_errors: yes
+
+# add registration-mail-queue script to startup
+- shell: echo "{{app_path}}/src/backend/yii registration-mail-queue" > /etc/rc.local
+- shell: echo "exit 0" >> /etc/rc.local
+

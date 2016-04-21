@@ -1,0 +1,41 @@
+---
+
+- name: PostgreSQL Repo
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
+
+- name: PostgreSQL Repo Key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc validate_certs=no
+
+- name: PostgreSQL
+  apt: pkg=postgresql-9.4 force=yes
+
+#- shell: pg_createcluster 9.4 main --start
+
+- name: Reload postgresql
+  service: name=postgresql state=reloaded
+
+- name: /etc/postgresql/9.4/main/pg_hba.conf
+  template: src=pg_hba.conf dest=/etc/postgresql/9.4/main/pg_hba.conf owner=postgres group=postgres mode=0640
+  notify: Restart PostgreSQL
+
+- name: /etc/postgresql/9.4/main/postgresql.conf
+  template: src=postgresql.conf dest=/etc/postgresql/9.4/main/postgresql.conf owner=postgres group=postgres mode=0640
+  notify: Restart PostgreSQL
+
+
+- apt: pkg={{item}} force=yes
+  with_items:
+    - python-psycopg2
+
+- postgresql_user: name={{db_user}} password={{db_pass}} role_attr_flags=SUPERUSER
+  sudo: yes
+  sudo_user: postgres
+
+- postgresql_db: name={{db_name}} encoding='UTF-8' template='template0'
+  sudo: yes
+  sudo_user: postgres
+
+- template: src=recreatedb.tpl    dest={{app_path}}/install/db/recreatedb.sh        mode=0755
+  when: yii_env == "dev"
+
+- shell: service postgresql restart

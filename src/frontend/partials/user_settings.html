@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Настройки аккаунта
+            </header>
+            <div class="panel-body">
+                <form ng-submit="updateUser()" method="post" role="form">
+
+                    <div ng-if="userLoaded">
+                        <div ng-class="{ 'has-success': !error['password'] && updateSubmitted,
+                                            'has-error': error['password'] && updateSubmitted }"
+                             class="form-group required">
+                            <label class="control-label" for="loginform-password">Новый пароль</label>
+                            <input ng-model="userModel.password" type="password" id="loginform-password" class="form-control"
+                                   placeholder="Новый пароль">
+
+                            <p class="help-block help-block-error">{{ error['password'] }}</p>
+                        </div>
+
+                        <div ng-class="{ 'has-success': !error['password_confirm'] && updateSubmitted,
+                                            'has-error': error['password_confirm'] && updateSubmitted }"
+                             class="form-group required">
+                            <label class="control-label" for="loginform-password_confirm">Повтор пароля</label>
+                            <input ng-model="userModel.password_confirm" type="password" id="loginform-password_confirm" class="form-control"
+                                   placeholder="Повтор пароля">
+
+                            <p class="help-block help-block-error">{{ error['password_confirm'] }}</p>
+                        </div>
+
+                        <div ng-class="{ 'has-success': !error['email'] && updateSubmitted,
+                                                'has-error': error['email'] && updateSubmitted }"
+                             class="form-group required">
+                            <label class="control-label" for="loginform-email">Email</label>
+                            <input ng-model="userModel.email" type="email" id="loginform-email" class="form-control"
+                                   placeholder="Email">
+
+                            <p class="help-block help-block-error">{{ error['email'] }}</p>
+                        </div>
+
+                        <div class="has-error">
+                            <p class="help-block help-block-error">{{ error['message'] }}</p>
+                        </div>
+                    </div>
+
+                    <div ng-show="updateButtonPressed || !userLoaded" class="text-center">
+                        <img src="/img/ajax-loader.gif">
+                    </div>
+
+                    <div ng-show="!updateButtonPressed" class="form-group" style="margin-top: 15px;">
+                        <button type="submit" class="btn btn-primary btn-block" name="update-button">Изменить данные</button>
+                    </div>
+
+                </form>
+                <div ng-if="statusSuccess" class="alert alert-success">
+                    Данные обновлены.
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+

@@ -1,0 +1,104 @@
+<header class="header">
+    <a href="/" class="logo">
+        Finansez
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <div class="navbar-right">
+            <ul class="nav navbar-nav">
+                <!-- Messages: style can be found in dropdown.less-->
+
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-user"></i>
+                        <span>{{getUserName()}} <i class="caret"></i></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                        <li class="dropdown-header text-center">{{getUserName()}}</li>
+
+                        <li>
+                            <a data-toggle="modal" href="/user-settings">
+                                <i class="fa fa-cog fa-fw pull-right"></i>
+                                Настройки
+                            </a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="#" ng-click="logout()"><i class="fa fa-ban fa-fw pull-right"></i> Выход</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="wrapper row-offcanvas row-offcanvas-left" resizewrapper>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="left-side sidebar-offcanvas">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <ul class="sidebar-menu">
+                <li ng-class=" {'active' : isCurrentPath('/dashboard')}">
+                    <a href="/dashboard">
+                        <i class="fa fa-dashboard"></i> <span>Главная</span>
+                    </a>
+                </li>
+                <li ng-class="{'active' : isCurrentPath('/transaction')}">
+                    <a href="/transaction">
+                        <i class="fa fa-gavel"></i> <span>Операции</span>
+                    </a>
+                </li>
+
+                <li ng-class="{'active' : isCurrentPath('/stat-by-month')}">
+                    <a href="/stat-by-month">
+                        <i class="fa fa-bar-chart"></i> <span>Статистика по месяцам</span>
+                    </a>
+                </li>
+
+                <li ng-class="{'active' : isCurrentPath('/stat-by-category')}">
+                    <a href="/stat-by-category">
+                        <i class="fa fa-pie-chart"></i> <span>Статистика по категориям</span>
+                    </a>
+                </li>
+
+                <li ng-class="{'active' : isCurrentPath('/bill')}">
+                    <a href="/bill">
+                        <i class="fa fa-rouble"></i> <span>Счета</span>
+                    </a>
+                </li>
+
+                <li ng-class="{'active' : isCurrentPath('/category')}">
+                    <a href="/category">
+                        <i class="fa fa-glass"></i> <span>Категории</span>
+                    </a>
+                </li>
+
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <aside class="right-side">
+
+        <!-- Main content -->
+        <section class="content">
+
+
+            <div data-ui-view=""></div>
+
+
+            <!-- row end -->
+        </section>
+        <!-- /.content -->
+        <div class="footer-main">
+            <div class="footer-content">&copy Finansez, 2016</div>
+        </div>
+    </aside>
+    <!-- /.right-side -->
+
+</div><!-- ./wrapper -->

@@ -1,0 +1,7 @@
+127.0.0.1 localhost
+
+{% if hosts %}
+{% for host in hosts %}
+{{host.ip}} {{host.host}}
+{% endfor %}
+{% endif %}

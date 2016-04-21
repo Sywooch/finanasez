@@ -1,0 +1,26 @@
+---
+nginx_user: "finansez"
+user: "victor"
+hostname: "finansez"
+app_path: "/opt/finansez"
+
+db_host: "127.0.0.1"
+db_name: "finansez"
+db_user: "finansez"
+db_pass: "finansez"
+
+amqp_host: "localhost"
+amqp_port: 5672
+amqp_user: "guest"
+amqp_pass: "guest"
+
+postgres_synchronous_commit: "on"
+
+hosts:
+  - ip: 127.0.0.1
+    host: finansez.com v1.api.finansez.com
+
+yii_debug: "false"
+yii_env: "prod"
+
+cache_static_value: "max"
